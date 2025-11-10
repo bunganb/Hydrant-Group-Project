@@ -64,6 +64,83 @@ void drawBox(float width, float height, float depth)
     glEnd();
 }
 
+// Draw fire alarm button
+void drawAlarmButton(float x, float y, float z)
+{
+    glPushMatrix();
+    glTranslatef(x, y, z);
+
+    // Button frame (black)
+    glColor3f(0.1, 0.1, 0.1);
+    glPushMatrix();
+    glScalef(3.0, 3.0, 0.5);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Red button
+    glColor3f(0.9, 0.1, 0.1);
+    glTranslatef(0.0, 0.0, 0.5);
+    glScalef(2.0, 2.0, 0.8);
+    glutSolidCube(1.0);
+
+    glPopMatrix();
+}
+
+// Draw small box (fire hose connector)
+void drawConnector(float x, float y, float z)
+{
+    glPushMatrix();
+    glTranslatef(x, y, z);
+
+    // Connector box
+    glColor3f(0.8, 0.1, 0.1);
+    glPushMatrix();
+    glScalef(3.5, 3.5, 1.0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Small detail
+    glColor3f(0.9, 0.9, 0.9);
+    glTranslatef(0.0, 0.0, 0.6);
+    glutSolidSphere(0.8, 10, 10);
+
+    glPopMatrix();
+}
+
+// Draw speaker holes pattern
+void drawSpeakerHoles(float x, float y, float z)
+{
+    glColor3f(0.2, 0.2, 0.2);
+    for (int i = -2; i <= 2; i++)
+    {
+        for (int j = -2; j <= 2; j++)
+        {
+            glPushMatrix();
+            glTranslatef(x + i * 1.2, y + j * 1.2, z);
+            glutSolidSphere(0.3, 8, 8);
+            glPopMatrix();
+        }
+    }
+}
+
+// Draw text "HYDRANT" using simple blocks
+void drawHydrantText(float x, float y, float z)
+{
+    glColor3f(1.0, 1.0, 1.0);
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    glScalef(0.5, 0.5, 0.5);
+
+    // Just draw a simple representation
+    glRasterPos3f(-15.0, 0.0, 0.0);
+    const char* text = "HYDRANT";
+    for (const char* c = text; *c != '\0'; c++)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+    }
+
+    glPopMatrix();
+}
 
 // Draw the complete hydrant cabinet
 void drawHydrantCabinet()
@@ -82,6 +159,11 @@ void drawHydrantCabinet()
     glTranslatef(0.0, 15.0, 0.0);
     drawBox(30.0, 10.0, 10.0);
     glPopMatrix();
+
+    // Draw components on upper panel
+    drawAlarmButton(-8.0, 15.0, 5.5);
+    drawConnector(4.0, 15.0, 5.5);
+    drawSpeakerHoles(12.0, 15.0, 5.3);
 
     // Door with animation
     glPushMatrix();
@@ -111,7 +193,7 @@ void drawHydrantCabinet()
     glTranslatef(-15.0, -10.0, 5.0);
     glRotatef(doorAngle, 0.0, 1.0, 0.0);
     glTranslatef(15.0, 0.0, 0.0);
-
+    drawHydrantText(0.0, -5.0, 1.5);
     glPopMatrix();
 
     // Side pipes
